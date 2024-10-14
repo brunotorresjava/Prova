@@ -1,0 +1,68 @@
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class CadastroClientes {
+
+    public static void main(String[] args) {
+        ArrayList<String[]> clientes = new ArrayList<>();
+        String[] opcoes = {"Sim", "Não"};
+
+        while (true) {
+            // Recebe o nome completo do cliente
+            String nomeCompleto = JOptionPane.showInputDialog(null, "Informe o nome completo do cliente:");
+            if (nomeCompleto == null) {
+                break; // Interrompe se o usuário cancelar
+            }
+
+            // Recebe o e-mail institucional do cliente
+            String email = JOptionPane.showInputDialog(null, "Informe o e-mail institucional do cliente:");
+            if (email == null) {
+                break; // Interrompe se o usuário cancelar
+            }
+
+            // Utiliza regex para extrair partes do e-mail
+            String regex = "([a-zA-Z]+)\\.([a-zA-Z]+)@([a-zA-Z]+)\\.";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(email);
+
+            if (matcher.find()) {
+                String nome = matcher.group(1);
+                String sobrenome = matcher.group(2);
+                String instituicao = matcher.group(3).toLowerCase();
+                String usuario = nome.toLowerCase() + "." + sobrenome.toLowerCase();
+
+                // Adiciona as informações na lista
+                clientes.add(new String[]{sobrenome, nome, instituicao, usuario});
+            } else {
+                JOptionPane.showMessageDialog(null, "E-mail inválido! Tente novamente.");
+            }
+
+            // Pergunta se o usuário quer cadastrar outro cliente
+            int resposta = JOptionPane.showOptionDialog(null, "Deseja cadastrar outro cliente?", "Cadastro de Clientes",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+
+            if (resposta != 0) { // "Não" ou fechar a janela
+                break;
+            }
+        }
+
+        // Exibe os resultados em formato de tabela
+        if (!clientes.isEmpty()) {
+            StringBuilder tabela = new StringBuilder();
+            tabela.append("Sobrenome\tNome\tInstituição\tUsuário\n");
+
+            for (String[] cliente : clientes) {
+                tabela.append(cliente[0]).append("\t")
+                        .append(cliente[1]).append("\t")
+                        .append(cliente[2]).append("\t")
+                        .append(cliente[3]).append("\n");
+            }
+
+            JOptionPane.showMessageDialog(null, tabela.toString());
+        } else {
+            JOptionPane.showMessageDialog(null, "Nenhum cliente cadastrado.");
+        }
+    }
+}
