@@ -1,0 +1,85 @@
+import javax.swing.*;
+import java.util.Random;
+
+public class PedraPapelTesouraLagartoSpock {
+
+    public static void main(String[] args) {
+        String[] opcoes = {"Pedra", "Papel", "Tesoura", "Lagarto", "Spock"};
+        int vitoriasUsuario = 0;
+        int vitoriasMaquina = 0;
+        Random random = new Random();
+
+        while (vitoriasUsuario < 3 && vitoriasMaquina < 3) {
+            // Solicita a escolha do usuário
+            String escolhaUsuario = (String) JOptionPane.showInputDialog(null, "Escolha sua jogada:", "Pedra, Papel, Tesoura, Lagarto, Spock",
+                    JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+
+            // Gera a escolha da máquina
+            String escolhaMaquina = opcoes[random.nextInt(opcoes.length)];
+
+            // Exibe as escolhas
+            JOptionPane.showMessageDialog(null, "Você escolheu: " + escolhaUsuario + "\nMáquina escolheu: " + escolhaMaquina);
+
+            // Determina o resultado da rodada
+            String resultadoRodada = determinaVencedor(escolhaUsuario, escolhaMaquina);
+
+            // Atualiza o placar
+            if (resultadoRodada.equals("Usuário")) {
+                vitoriasUsuario++;
+                JOptionPane.showMessageDialog(null, "Você venceu esta rodada!");
+            } else if (resultadoRodada.equals("Máquina")) {
+                vitoriasMaquina++;
+                JOptionPane.showMessageDialog(null, "A máquina venceu esta rodada!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Esta rodada foi um empate!");
+            }
+
+            // Exibe o placar atual
+            JOptionPane.showMessageDialog(null, "Placar atual:\nVocê: " + vitoriasUsuario + "\nMáquina: " + vitoriasMaquina);
+        }
+
+        // Exibe o vencedor final
+        if (vitoriasUsuario == 3) {
+            JOptionPane.showMessageDialog(null, "Parabéns! Você venceu o jogo!");
+        } else {
+            JOptionPane.showMessageDialog(null, "A máquina venceu o jogo. Boa sorte na próxima vez!");
+        }
+    }
+
+    // Método para determinar o vencedor da rodada
+    public static String determinaVencedor(String usuario, String maquina) {
+        if (usuario.equals(maquina)) {
+            return "Empate";
+        }
+
+        switch (usuario) {
+            case "Tesoura":
+                if (maquina.equals("Papel") || maquina.equals("Lagarto")) {
+                    return "Usuário";
+                }
+                break;
+            case "Papel":
+                if (maquina.equals("Pedra") || maquina.equals("Spock")) {
+                    return "Usuário";
+                }
+                break;
+            case "Pedra":
+                if (maquina.equals("Tesoura") || maquina.equals("Lagarto")) {
+                    return "Usuário";
+                }
+                break;
+            case "Lagarto":
+                if (maquina.equals("Papel") || maquina.equals("Spock")) {
+                    return "Usuário";
+                }
+                break;
+            case "Spock":
+                if (maquina.equals("Tesoura") || maquina.equals("Pedra")) {
+                    return "Usuário";
+                }
+                break;
+        }
+
+        return "Máquina";
+    }
+}
